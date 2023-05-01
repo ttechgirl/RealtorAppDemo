@@ -16,6 +16,8 @@ export default function SignIn() {
       ...prevState,[event.target.id]:event.target.value,
     }))
   }
+
+ 
   return (
     <section>
     <h1  className='text-3xl text-center mt-6 font-bold'>Sign In</h1>
@@ -42,13 +44,12 @@ export default function SignIn() {
                     <Link to='/forgot-password'>Forgot password?</Link>
                   </p>
                 </div>
+                <button className='w-full bg-blue-600 text-white py-2 px-4 text-xs font-medium uppercase rounded-sm shadow-md hover:bg-blue-700 transition duration-100 ease-in-out hover:shadow-lg active:bg-blue-900 mb-1' type='submit'>Sign in</button>
+               <div className='flex items-center my-3 before:border-t before:flex-1 before:border-gray-300 after:border-t after:flex-1 after:border-gray-300'>
+                <p className='text-center text-sm font-medium'>OR</p>
+               </div>
+               <OAuth></OAuth>
             </form>
-            <button className='w-full bg-blue-600 text-white py-2 px-4 text-xs font-medium uppercase rounded-sm shadow-md hover:bg-blue-700 transition duration-100 ease-in-out hover:shadow-lg active:bg-blue-900 mb-1' type='submit'>Sign in</button>
-            <div className='flex items-center my-3 before:border-t before:flex-1 before:border-gray-300 after:border-t after:flex-1 after:border-gray-300'>
-              <p className='text-center text-sm font-medium'>OR</p>
-            </div>
-            <OAuth></OAuth>
-           
         </div>
     </div>
     </section>
