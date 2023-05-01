@@ -1,11 +1,25 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import OAuth from '../components/OAuth';
+import { toast } from 'react-toastify';
+import { getAuth, sendPasswordResetEmail } from 'firebase/auth';
 
 export default function ForgotPassword(){
   const [email,setEmail] =useState("");
   function onChange(e){
     setEmail(e.target.value);
+ }
+  async function onSubmit(e){
+    e.preventDefault();
+    try {
+      const auth = getAuth();
+      //promise
+      const userCredential = await sendPasswordResetEmail(auth,email);
+      toast.success(`Reset email link has been sent to ${email}`);
+
+    } catch (error) {
+      toast.error('Could not send reset password,check email address');
+    }
  }
   return (
     <section>
@@ -15,7 +29,7 @@ export default function ForgotPassword(){
             <img src='https://media.istockphoto.com/id/1180641712/photo/lock-your-data.jpg?s=612x612&w=0&k=20&c=yupzk2T4vRxXD-Y6oYjEPN6VyUVGBlo1AKzT_WLPJg0=' alt="key" className='w-full rounded-2xl'/>
         </div>
         <div className='w-fill md:w-[67%] lg:w-[40%] lg:ml-20 mb-6  '>
-            <form>
+            <form onSubmit={onSubmit}>
                 <input type='email' id='email' placeholder='Email address' value={email} onChange={onChange} className='w-full px-4 py-2 text-xl text-gray-600 bg-white border-gray-300 rounded-sm transition ease-in-out mb-3' >
                 </input>
                 <div className='flex justify-between whitespace-nowrap text-sm sm:text-lg mb-4'> 
@@ -23,12 +37,12 @@ export default function ForgotPassword(){
                     Remember password? <Link to='/sign-in' className='text-blue-600 hover:text-blue-800 transition duration-200 ease-in-out ml-2'>Sign in instead</Link>
                   </p>
                 </div>
-            </form>
-            <button className='w-full bg-blue-600 text-white py-2 px-4 text-xs font-medium uppercase rounded-sm shadow-md hover:bg-blue-700 transition duration-100 ease-in-out hover:shadow-lg active:bg-blue-900 mb-1' type='submit'>Send reset email</button>
+                <button className='w-full bg-blue-600 text-white py-2 px-4 text-xs font-medium uppercase rounded-sm shadow-md hover:bg-blue-700 transition duration-100 ease-in-out hover:shadow-lg active:bg-blue-900 mb-1' type='submit'>Send reset email</button>
             <div className='flex items-center my-3 before:border-t before:flex-1 before:border-gray-300 after:border-t after:flex-1 after:border-gray-300'>
               <p className='text-center text-sm font-medium'>OR</p>
             </div>
             <OAuth></OAuth>
+            </form>
         </div>
     </div>
     </section>
