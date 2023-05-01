@@ -34,7 +34,6 @@ export default function OAuth() {
     } catch (error) {
       toast.error('Unable to sign in user with google');
     }
-
   }
 
   return (

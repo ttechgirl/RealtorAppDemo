@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import{FaEyeSlash,FaEye} from 'react-icons/fa'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import OAuth from '../components/OAuth';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { toast } from 'react-toastify';
 
 export default function SignIn() {
   const [showPassword,setShowPassword] = useState(false);
@@ -16,8 +18,22 @@ export default function SignIn() {
       ...prevState,[event.target.id]:event.target.value,
     }))
   }
-
- 
+  const navigate = useNavigate();
+  async function onSubmit(e){
+    //prevents the page from refreshing
+    e.preventDefault();
+    try {
+      const auth = getAuth();
+      //promise
+      const userCredentials = await signInWithEmailAndPassword(auth,email,password)
+      //checks if the user credential is true and exist
+      if(userCredentials.user){
+        navigate('/');
+      }
+    } catch (error) {
+      toast.error('Invalid login details');
+    }
+  }
   return (
     <section>
     <h1  className='text-3xl text-center mt-6 font-bold'>Sign In</h1>
@@ -26,7 +42,7 @@ export default function SignIn() {
             <img src='https://media.istockphoto.com/id/1180641712/photo/lock-your-data.jpg?s=612x612&w=0&k=20&c=yupzk2T4vRxXD-Y6oYjEPN6VyUVGBlo1AKzT_WLPJg0=' alt="key" className='w-full rounded-2xl'/>
         </div>
         <div className='w-fill md:w-[67%] lg:w-[40%] lg:ml-20 mb-6  '>
-            <form>
+            <form onSubmit={onSubmit}>
                 <input type='email' id='email' placeholder='Email address' value={email} onChange={onChange} className='w-full px-4 py-2 text-xl text-gray-600 bg-white border-gray-300 rounded-sm transition ease-in-out mb-3' >
                 </input>
                 <div className='relative mb-4'>
