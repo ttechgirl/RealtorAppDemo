@@ -50,7 +50,7 @@ async function onSubmit(){
           <input type='text' id='name' value={name} disabled ={!updateDetails} onChange={onChange} className={`w-full px-4 py-2 mb-6  text-xl text-gray-700 bg-white border border-gray-300 rounded transition ease-in-out ${updateDetails && 'bg-red-200 focus:bg-red-200'}`} ></input>
 
           {/*name input*/}
-          <input type='email' id='email' value={email} disabled ={!updateDetails} onChange={onChange} className={`w-full px-4 py-2 mb-6  text-xl text-gray-700 bg-white border border-gray-300 rounded transition ease-in-out ${updateDetails && 'bg-red-200 focus:bg-red-200'}`} ></input>
+          <input type='email' id='email' value={email} disabled  className='w-full px-4 py-2 mb-6  text-xl text-gray-700 bg-white border border-gray-300 rounded transition ease-in-out' ></input>
 
           <div className='flex justify-between whitespace-nowrap text-sm sm:text-lg mb-6'>
             <p>Do you want to change your details?
