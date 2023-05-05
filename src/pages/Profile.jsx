@@ -13,16 +13,19 @@ export default function Profile() {
   });
   const {name,email}=formData;
   const navigate = useNavigate();
+
   function logOut(){
     auth.signOut();
     navigate('/')
   }
  const [updateDetails, setUpdateDetails] = useState(false);
+
  function onChange(e){
   setFormData((prevState)=>({
     ...prevState,[e.target.id]: e.target.value,
   })) 
  }
+ 
 async function onSubmit(){
   try {
     if(auth.currentUser.displayName !==name){
