@@ -9,6 +9,8 @@ import Header from "./components/Header";
 import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PrivateRoute from "./components/PrivateRoute";
+import Footer from "./components/Footer";
+import Listings from "./pages/Listings";
 
 function App() {
   return (
@@ -24,6 +26,8 @@ function App() {
             <Route path="/profile" element={<Profile/>}> </Route>
           </Route>
           <Route path="/sign-up" element={<SignUp/>}> </Route>
+          <Route path="/create-listing" element={<Listings/>}> </Route>
+
           </Routes>
       </Router>
       <ToastContainer
@@ -38,6 +42,7 @@ function App() {
         pauseOnHover
         theme="dark"
       />  
+        <Footer/>
     </>
   );
 }
