@@ -4,10 +4,14 @@ import { toast } from 'react-toastify';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { getAuth} from "firebase/auth";
 import { v4 as uuidv4 } from 'uuid';
+import { addDoc, collection,serverTimestamp} from 'firebase/firestore';
+import { db } from '../firebase';
+import { useNavigate } from 'react-router';
 
 
 export default function Listings() {
     const auth = getAuth();
+    const navigate = useNavigate();
     const [geoLocationEnabled,setGeoLocationEnabled] =useState(true)
     const [loading,setLoading] = useState(false)
     const [formData,setFormData]=useState({
@@ -53,7 +57,7 @@ export default function Listings() {
         
         e.preventDefault();
         setLoading(true);
-        if(discount >= regular){
+        if(+discount >= +regular){
             setLoading(true);
             toast.error('Discounted price should not be more than regular price')
             return;
@@ -64,10 +68,10 @@ export default function Listings() {
             return;
         }
 
-        /*let geoLocation={}
+        let geoLocation={}
         let location
         //google api key is required 
-        if(geoLocationEnabled){
+        /*l if(geoLocationEnabled){
             //https://maps.googleapis.com/maps/api/geocode/outputFormat?parameters
             const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${process.environ.local.REACT_APP_GEOCODE_API_KEY}`);
             const data = await response.json();
@@ -130,7 +134,18 @@ export default function Listings() {
             toast.error('Images not uploaded');
             return;
         })
-        console.log(imgUrls)
+        const formDataCopy = {
+            ...formData,
+            imgUrls,
+            geoLocation,
+            timestamp:serverTimestamp()
+        };
+        delete formDataCopy.images;
+        !formDataCopy.offers && delete formDataCopy.discount;
+        const  docRef = await addDoc(collection(db,'listings'),formDataCopy);
+        setLoading(false);
+        toast.success('Listing created');
+        navigate(`/category/${formDataCopy.type}/${docRef.id}`);
         
         if(loading){
          return<Spinning/>
@@ -352,6 +367,7 @@ export default function Listings() {
                  accept='.jpg,.png,.jpeg'
                  multiple
                  required
+                 onChange={onChange}
                  className=' w-full border border-gray-300 px-2 py-1 transition duration-150 ease-in-out bg-white rounded focus:bg-white focus:border-slate-600'
                  />
             </div>
