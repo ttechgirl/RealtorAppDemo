@@ -1,6 +1,15 @@
 import React, { useState } from 'react'
+import Spinning from '../components/Spinning';
+import { toast } from 'react-toastify';
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { getAuth} from "firebase/auth";
+import { v4 as uuidv4 } from 'uuid';
+
 
 export default function Listings() {
+    const auth = getAuth();
+    const [geoLocationEnabled,setGeoLocationEnabled] =useState(true)
+    const [loading,setLoading] = useState(false)
     const [formData,setFormData]=useState({
         type:'rent',
         name:'',
@@ -11,21 +20,127 @@ export default function Listings() {
         address:'',
         description:'',
         offers:true,
-        regular:0,
-        discount:0
-
+        regular:10000,
+        discount:0,
+        latitude:0,
+        longitude:0,
+        images:{},
     });
-    const {type,name,bedrooms,bathrooms,parking,furnished,address,description,offers,regular,discount}=formData;
-    function onChange(){
+    const {type,name,bedrooms,bathrooms,parking,furnished,address,description,offers,regular,discount,latitude,longitude,images}=formData;
+    function onChange(e){
+        let boolean =null;
+        if(e.target.value === 'true'){
+            boolean = true
+        }
+        if(e.target.value === 'false'){
+            boolean = false
+        }
+        //files
+        if(e.target.files){
+            setFormData((prevState)=>({
+                ...prevState,images:e.target.files
 
+            }));
+        }
+        //text or boolean or number
+        else{
+            setFormData((prevState)=>({
+                ...prevState,[e.target.id]:boolean ?? e.target.value
+            }));
+        }
     }
-    function onSubmit(){
+    async function onSubmit(e){
+        
+        e.preventDefault();
+        setLoading(true);
+        if(discount >= regular){
+            setLoading(true);
+            toast.error('Discounted price should not be more than regular price')
+            return;
+        }
+        if(images.length > 6){
+            setLoading(false);
+            toast.error('File exceeded the maximum number of 6')
+            return;
+        }
 
+        /*let geoLocation={}
+        let location
+        //google api key is required 
+        if(geoLocationEnabled){
+            //https://maps.googleapis.com/maps/api/geocode/outputFormat?parameters
+            const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${process.environ.local.REACT_APP_GEOCODE_API_KEY}`);
+            const data = await response.json();
+            console.log(data);
+            geoLocation.lat = data.results[0]?.geometry.location.lat?? 0
+            geoLocation.lat = data.results[0]?.geometry.location.lng?? 0
+
+            //the condition applies when the response status is 'zero result or undefined
+            location = data.status === 'ZERO_RESULTS' && undefined;
+            if(location === undefined || location.includes('undefined')){
+                setLoading(false);
+                toast.error('Please enter a correct address');
+                return;
+            }
+            else{
+                geoLocation.lat = latitude;
+                geoLocation.lng = longitude;
+            }
+        }*/
+        async function storeImage(image){
+            return new Promise((resolve,reject)=>{
+                const storage =getStorage();
+                const fileName = `${auth.currentUser.uid}-${image.name}-${uuidv4()}`;
+                const storageRef = ref(storage,fileName);
+                const uploadTask = uploadBytesResumable(storageRef, image);
+
+                uploadTask.on('state_changed', 
+                (snapshot) => {
+                    // Observe state change events such as progress, pause, and resume
+                    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log('Upload is ' + progress + '% done');
+                    switch (snapshot.state) {
+                    case 'paused':
+                        console.log('Upload is paused');
+                        break;
+                    case 'running':
+                        console.log('Upload is running');
+                        break;
+                    }
+                }, 
+                (error) => {
+                    // Handle unsuccessful uploads
+                    reject(error);
+                }, 
+                () => {
+                    // Handle successful uploads on complete
+                    // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+                    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    resolve(downloadURL);
+                    });
+                }
+                );
+           });
+        }
+        const imgUrls=await Promise.all(
+            [...images].map((image)=>storeImage(image))
+        ).catch((error)=>{
+            setLoading(false);
+            toast.error('Images not uploaded');
+            return;
+        })
+        console.log(imgUrls)
+        
+        if(loading){
+         return<Spinning/>
+        }
     }
   return (
-    <main className='max-w-md px-2 mx-auto text-sm sm:text-lg'>
+    <main className=' max-w-md px-2 mx-auto text-sm sm:text-lg'>
+       
         <h1 className='font-bold text-center text-3xl mt-6'>Create a Listing</h1>
-        <form className=''>
+        <form onSubmit={onSubmit}>
             <p className='font-semibold text-lg mt-6'>Sell/Rent </p>
             <div className='flex mb-6'>
                 <button type='button ' 
@@ -51,7 +166,7 @@ export default function Listings() {
                 onChange={onChange} 
                 required 
                 minLength='10' 
-                maxLength='50' 
+                maxLength='30' 
                 className='w-full rounded transition duration-150 ease-in  text-xl text-gray-700 px-4 py-2 bg-white border-gray-200 focus:bg-white focus:text-gray-700 focus:slate-600 shadow-sm'
            />
             <div className="flex space-x-6 mb-3">
@@ -124,6 +239,40 @@ export default function Listings() {
                 required 
                 className='w-full mb-6  rounded transition duration-150 ease-in  text-xl text-gray-700 px-4 py-2 bg-white border border-gray-200 focus:bg-white focus:text-gray-700  focus:border-slate-600 shadow-sm'
             />
+            {/*manual map geolocation */}
+             <div className="flex items-center mb-4">
+                 {geoLocationEnabled && (
+                <div>
+                        <p className='font-semibold text-lg '>Latitude</p>
+                     <input type="number"  
+                        id="latitude"
+                        value={latitude} 
+                        onChange={onChange} 
+                        min='-90'
+                        max='90' 
+                        required ={address}
+                        className='w-full text-center rounded transition duration-150 ease-in-out font-medium text-xl text-gray-700 px-4 py-2 bg-white border border-gray-200 focus:bg-white focus:text-gray-700 focus:slate-600 shadow-sm focus:border-slate-600'
+                     />
+                    </div>
+            )}
+            </div>
+            {/*manual map geolocation */}
+            <div className="flex items-center mb-4">
+                 {geoLocationEnabled && (
+                <div>
+                        <p className='font-semibold text-lg '>Longitude</p>
+                     <input type="number"  
+                        id="longitude"
+                        value={longitude} 
+                        onChange={onChange} 
+                        min='-180'
+                        max='180' 
+                        required ={address}
+                        className='w-full text-center rounded transition duration-150 ease-in-out font-medium text-xl text-gray-700 px-4 py-2 bg-white border border-gray-200 focus:bg-white focus:text-gray-700 focus:slate-600 shadow-sm focus:border-slate-600'
+                     />
+                    </div>
+            )}
+            </div>
             <p className='font-semibold text-lg '>Description</p>
             <textarea 
             type='text' 
@@ -199,7 +348,7 @@ export default function Listings() {
                 <p className='font-semibold text-lg'>Images</p>
                 <p className='text-gray-600 '>The first image will be the cover (max 6)</p>
                 <input type="file" 
-                 id="image" 
+                 id="images" 
                  accept='.jpg,.png,.jpeg'
                  multiple
                  required

@@ -26,8 +26,9 @@ function App() {
             <Route path="/profile" element={<Profile/>}> </Route>
           </Route>
           <Route path="/sign-up" element={<SignUp/>}> </Route>
-          <Route path="/create-listing" element={<Listings/>}> </Route>
-
+          <Route path="/create-listing" element={<PrivateRoute/>}>
+             <Route path="/create-listing" element={<Listings/>}> </Route>
+          </Route>
           </Routes>
       </Router>
       <ToastContainer
@@ -42,7 +43,7 @@ function App() {
         pauseOnHover
         theme="dark"
       />  
-        <Footer/>
+       {/*<Footer/> */} 
     </>
   );
 }
