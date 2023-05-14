@@ -2,8 +2,10 @@ import React from 'react'
 import Moment from 'react-moment'
 import { Link } from 'react-router-dom'
 import {MdLocationPin} from 'react-icons/md'
+import {FaTrashAlt} from 'react-icons/fa'
+import {RiEdit2Fill} from 'react-icons/ri'
 
-export default function ListedItem({listing,id}) {
+export default function ListedItem({listing,id,onDelete,onEdit}) {
   return (
     <li className='bg-white flex flex-col justify-between items-center rounded-md overflow-hidden shadow-xl hover:shadow-xl transition-shadow duration-150 relative m-[10px]'>
       <Link to={`/category/${listing.type}/${id}`} className='contents'>
@@ -16,7 +18,7 @@ export default function ListedItem({listing,id}) {
         </Moment>
         <div className="w-full p-[10px]">
           <div className="flex items-center space-x-1">
-            <MdLocationPin className='h-4 w-4 text-red-600  '/>
+            <MdLocationPin className='h-4 w-4 text-green-600 '/>
             <p className='font-semibold text-sm mb-[2px] text-gray-600 truncate'>{listing.address}</p>
           </div>
           <p className='font-semibold m-0 text-lg truncate'>{listing.name} </p>
@@ -40,6 +42,14 @@ export default function ListedItem({listing,id}) {
           </div>
         </div>
       </Link>
+      {onDelete && (
+        <FaTrashAlt className='absolute bottom-2 right-2 h-[14px] text-red-600 cursor-pointer' onClick={()=>onDelete(listing.id)}/>
+      )}
+      {onEdit && (
+        <RiEdit2Fill className='absolute bottom-2 right-8 h-[16px] text-black cursor-pointer'
+         onClick={()=>onEdit(listing.id)}
+         />
+      )}
     </li>
   )
 }
