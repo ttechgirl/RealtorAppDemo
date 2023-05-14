@@ -54,7 +54,6 @@ export default function Listings() {
         }
     }
     async function onSubmit(e){
-        
         e.preventDefault();
         setLoading(true);
         if(+discount >= +regular){
@@ -138,7 +137,8 @@ export default function Listings() {
             ...formData,
             imgUrls,
             geoLocation,
-            timestamp:serverTimestamp()
+            timestamp:serverTimestamp(),
+            userRef: auth.currentUser.uid
         };
         delete formDataCopy.images;
         !formDataCopy.offers && delete formDataCopy.discount;
