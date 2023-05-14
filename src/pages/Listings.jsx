@@ -26,8 +26,8 @@ export default function Listings() {
         offers:true,
         regular:10000,
         discount:0,
-        latitude:0,
-        longitude:0,
+        latitude:0.0,
+        longitude:0.0,
         images:{},
     });
     const {type,name,bedrooms,bathrooms,parking,furnished,address,description,offers,regular,discount,latitude,longitude,images}=formData;
@@ -263,8 +263,8 @@ export default function Listings() {
                         id="latitude"
                         value={latitude} 
                         onChange={onChange} 
-                        min='-90'
-                        max='90' 
+                        min='-88.99'
+                        max='88.99' 
                         required ={address}
                         className='w-full text-center rounded transition duration-150 ease-in-out font-medium text-xl text-gray-700 px-4 py-2 bg-white border border-gray-200 focus:bg-white focus:text-gray-700 focus:slate-600 shadow-sm focus:border-slate-600'
                      />
@@ -280,8 +280,8 @@ export default function Listings() {
                         id="longitude"
                         value={longitude} 
                         onChange={onChange} 
-                        min='-180'
-                        max='180' 
+                        min='-178.99'
+                        max='178.99' 
                         required ={address}
                         className='w-full text-center rounded transition duration-150 ease-in-out font-medium text-xl text-gray-700 px-4 py-2 bg-white border border-gray-200 focus:bg-white focus:text-gray-700 focus:slate-600 shadow-sm focus:border-slate-600'
                      />
