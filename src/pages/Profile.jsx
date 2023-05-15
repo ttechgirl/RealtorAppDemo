@@ -24,6 +24,29 @@ export default function Profile() {
  const [listings,setListings] =useState(null);
  const [loading,setLoading] =useState(false);
 
+ useEffect(()=>{
+  async function fetchListings(){
+    //fetch the listings created by the user with the same primary key/uid&userRef from the database and it arranges it in order by ascending since its not specified
+    const listingRef = collection(db,'listings');
+    const queries = query(
+      listingRef,where('userRef','==',auth.currentUser.uid),orderBy('timestamp','desc'),
+    );
+    const querySnap =await getDocs(queries);
+    let listings = [];
+    querySnap.forEach((doc) => {
+      //uploads the items in the doc to the array list
+      return listings.push({
+        id: doc.id,
+        data:doc.data()
+      });
+    });
+    setListings(listings);
+    setLoading(false);
+  }
+  fetchListings();
+  //dependency
+},[auth.currentUser.uid]);
+
  function onChange(e){
   setFormData((prevState)=>({
     ...prevState,[e.target.id]: e.target.value,
@@ -46,28 +69,7 @@ export default function Profile() {
       toast.error('profile update not successful');
     }
   }
-  useEffect(()=>{
-    async function fetchListings(){
-      //fetch the listings created by the user with the same primary key/uid&userRef from the database and it arranges it in order by ascending since its not specified
-      const listingRef = collection(db,'listings');
-      const queries = query(
-        listingRef,where('userRef','==',auth.currentUser.uid),orderBy('timestamp','desc'),
-      );
-      const querySnap =await getDocs(queries);
-      let listings = [];
-      querySnap.forEach((doc) => {
-        //uploads the items in the doc to the array list
-        return listings.push({
-          id: doc.id,
-          data:doc.data()
-        });
-      });
-      setListings(listings);
-      setLoading(false);
-    }
-    fetchListings();
-    //dependency
-  },[auth.currentUser.uid]);
+  
 
   async function onDelete(listingId){
     if(window.confirm('Are you sure you want to delete?')){
@@ -77,7 +79,6 @@ export default function Profile() {
       );
       setListings(updatedListing);
       toast.success('Listing successfully deleted')
-
     }
   }
 
