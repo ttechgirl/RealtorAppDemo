@@ -25,7 +25,7 @@ export default function Profile() {
  const [loading,setLoading] =useState(false);
 
  useEffect(()=>{
-  async function fetchListings(){
+  async function fetchListing(){
     //fetch the listings created by the user with the same primary key/uid&userRef from the database and it arranges it in order by ascending since its not specified
     const listingRef = collection(db,'listings');
     const queries = query(
@@ -43,7 +43,7 @@ export default function Profile() {
     setListings(listings);
     setLoading(false);
   }
-  fetchListings();
+  fetchListing();
   //dependency
 },[auth.currentUser.uid]);
 

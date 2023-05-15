@@ -5,3 +5,10 @@
 body{
   background-color: azure;
 }
+.swiper-button-next::after,
+.swiper-button-prev::after{
+  color:rgb(100, 213, 233);
+}
+.swiper-pagination-progressbar .swiper-pagination-progressbar-fill{
+  background:rgb(100, 213, 233) !important;
+}
