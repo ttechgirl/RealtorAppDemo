@@ -9,7 +9,7 @@ export default function ListedItem({listing,id,onDelete,onEdit}) {
   return (
     <li className='bg-white flex flex-col justify-between items-center rounded-md overflow-hidden shadow-xl hover:shadow-xl transition-shadow duration-150 relative m-[10px]'>
       <Link to={`/category/${listing.type}/${id}`} className='contents'>
-        <img src={listing.imgUrls[2]} alt="image"
+        <img src={listing.imgUrls[0]} alt=""
          className='h-[170px] w-full object-cover hover:scale-105 transition-scale duration-200 ease-in '
          loading='lazy'
        />
@@ -25,7 +25,7 @@ export default function ListedItem({listing,id,onDelete,onEdit}) {
           <p className=' text-[#27a0eb] font-semibold mt-2'> 
              #{listing.offer ? listing.discount 
              .toString().replace(/\B(?=(\d{3})+(?!\d))/g,',')
-              : listing.regular .toString().replace(/\B(?=(\d{3})+(?!\d))/g,',')}
+              : listing.regular.toString().replace(/\B(?=(\d{3})+(?!\d))/g,',')}
               {listing.type==='rent' && ' / month' }
           </p>
           <div className="flex items-center mt-[10px] space-x-3">
