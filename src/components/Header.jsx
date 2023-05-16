@@ -40,7 +40,7 @@ export default function Header() {
                     <li className={`py-3 text-xs sm:text-sm font-semibold border-b-[3px] text-gray-400 border-b-transparent ${pathMatchRoute('/sign-in') && 'text-red-800 border-b-red-800' || pathMatchRoute('/profile') && 'text-red-800 border-b-red-800'}`} onClick={()=>navigate('/profile')}>{pageState}</li> 
                     {/*practicing*/}
                      <li className='space-x-10' >
-                        <FaUserCircle className='absolute right-3 top-3 text-base sm:text-lg text-gray-400 hover:animate-bounce hover:text-red-600 transition ease-in-out'></FaUserCircle>
+                        <FaUserCircle className='absolute right-3 top-3 text-base sm:text-lg text-gray-400  hover:text-red-600 transition duration-600 ease-in'></FaUserCircle>
                         
                      </li>
                 </ul>
