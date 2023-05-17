@@ -94,7 +94,7 @@ export default function Listings() {
                         </p>
                     ): <p className='bg-green-800 text-white w-full max-w-[100px] text-center text-sm font-semibold shadow-md rounded p-1'>No discount</p>}*/}
                      <p className='bg-green-800 text-white w-full max-w-[100px] text-center text-sm font-semibold shadow-md rounded p-1'>
-                          {listing !==null && listing.offer ? `#${+listing.regular - +listing.discount}discount`
+                          {listing !==null && listing.offers ? `Discount`
                           : 'No discount'
                           }
                       </p> 
