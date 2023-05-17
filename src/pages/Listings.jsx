@@ -143,16 +143,13 @@ export default function Listings() {
                  zoom={13} scrollWheelZoom={false}
                  style={{height:'100%',width:'100%'}}
                  >
-                  <p>
-                    {listing !==null && listing.address}
-                  </p>
                   <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                   />
                   <Marker position={[listing !==null && listing.latitude,listing !==null && listing.longitude]}>
                     <Popup>
-                      A pretty CSS3 popup. <br /> Easily customizable.
+                    {listing !==null && listing.address}
                     </Popup>
                   </Marker>
                 </MapContainer> 
