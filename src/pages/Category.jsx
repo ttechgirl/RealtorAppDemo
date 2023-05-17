@@ -4,11 +4,13 @@ import { toast } from 'react-toastify';
 import { db } from '../firebase';
 import Spinning from '../components/Spinning';
 import ListedItem from '../components/ListedItem';
+import { useParams } from 'react-router';
 
-export default function Offers() {
+export default function Category() {
   const [loading,setLoading] = useState(true);
   const [offerListings,setOfferListings] =useState(null);
   const [recentListings,setRecentListings] =useState(null);
+  const params =useParams();
 
   useEffect(()=>{
     async function fetchListings(){
@@ -16,7 +18,7 @@ export default function Offers() {
          //get reference
          const listingRef = collection(db,'listings')
          //create query
-         const queries = query(listingRef,where('offers', '==', true),orderBy('timestamp' ,'desc'),limit(8))
+         const queries = query(listingRef,where('type', '==', params.categoryName),orderBy('timestamp' ,'desc'),limit(8))
          //execute query
          const querySnap =await getDocs(queries);
          const recent = querySnap.docs[querySnap.docs.length - 1];
@@ -35,14 +37,14 @@ export default function Offers() {
       }
     }
     fetchListings();
-  },[])
+  },[params.categoryName])
 
   async function loadMoreListings(){
     try {
       //get reference
       const listingRef = collection(db,'listings')
       //create query
-      const queries = query(listingRef,where('offers', '==', true),orderBy('timestamp' ,'desc'),startAfter(setRecentListings) ,limit(4))
+      const queries = query(listingRef,where('type', '==', params.categoryName),orderBy('timestamp' ,'desc'),startAfter(setRecentListings) ,limit(4))
       //execute query
       const querySnap =await getDocs(queries);
       const recent = querySnap.docs[querySnap.docs.length - 1];
@@ -62,13 +64,15 @@ export default function Offers() {
   }
   return (
     <div className='max-w-6xl mx-auto px-3'>
-        <h1 className='font-bold text-3xl text-center mt-6'>Offers</h1>
+        <h1 className='font-bold text-3xl text-center mt-6'>
+            {params.categoryName === 'rent' ? 'Places for rent' : 'Places for Sale'}
+        </h1>
         {loading ? (
           <Spinning/>
         ): offerListings && offerListings.length > 0 ?(
           <>
           <main>
-            <ul className='sm:grid sm:grid mt-6-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'> 
+            <ul className='sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 mt-6'> 
             {offerListings.map((listing)=>
               <ListedItem
                   key={listing.id}

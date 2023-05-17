@@ -13,6 +13,7 @@ import Footer from "./components/Footer";
 import Listings from "./pages/Listings";
 import EditListing from "./pages/EditListing";
 import CreateListing from "./pages/CreateListing";
+import Category from "./pages/Category";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
              <Route path="/edit-listings/:listingId" element={<EditListing/>}> </Route>
           </Route>
           <Route path="/category/:categoryName/:listingId" element={<Listings/>}> </Route>
+          <Route path="/category/:categoryName/" element={<Category/>}> </Route>
 
           </Routes>
       </Router>
