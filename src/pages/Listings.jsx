@@ -11,6 +11,7 @@ import {MdLocationPin} from 'react-icons/md'
 import {FaBath,FaBed,FaParking, FaChair} from 'react-icons/fa'
 import { getAuth } from 'firebase/auth';
 import Contact from '../components/Contact';
+import { Marker, Popup, TileLayer,MapContainer } from 'react-leaflet';
 
 export default function Listings() {
     const auth=getAuth();
@@ -135,9 +136,26 @@ export default function Listings() {
                 listing= {listing}/>
               }
             </div>
-            
-            <div className="bg-blue-400 shadow-lg w-full h-[200px] lg-[400px]">
-
+            {/*map location.will fnction well with geolocation enabled */}
+            <div className="shadow-lg w-full h-[200px] md:h-[400px] z-10 md:ml-2 overflow-x-hidden md:mt-6 ">
+                <MapContainer 
+                 center={[listing !==null && listing.latitude,listing !==null && listing.longitude]} 
+                 zoom={13} scrollWheelZoom={false}
+                 style={{height:'100%',width:'100%'}}
+                 >
+                  <p>
+                    {listing !==null && listing.address}
+                  </p>
+                  <TileLayer
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  />
+                  <Marker position={[listing !==null && listing.latitude,listing !==null && listing.longitude]}>
+                    <Popup>
+                      A pretty CSS3 popup. <br /> Easily customizable.
+                    </Popup>
+                  </Marker>
+                </MapContainer> 
             </div>
         </div>
     </main>
