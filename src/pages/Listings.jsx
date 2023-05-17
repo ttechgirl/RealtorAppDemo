@@ -41,7 +41,7 @@ export default function Listings() {
     <main>
             {/*banner slide*/}
         <Swiper  
-            slidePerView ={1}
+            slidesPerView ={1}
             navigation
             pagination={{type:'progressbar'}}
             effect='fade'
