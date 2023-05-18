@@ -89,7 +89,7 @@ export default function Offers() {
           )}
           </>
         ):(
-          <p>There is no current offer</p>
+          <p>There are no current offer</p>
         )
         }
     </div>
