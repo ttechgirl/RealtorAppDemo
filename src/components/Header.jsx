@@ -34,15 +34,17 @@ export default function Header() {
             </div>
             <div>
                 {/*header menu list*/}
-                <ul className='flex space-x-10 cursor-pointer'>
+                <ul className='flex space-x-12 cursor-pointer'>
                     <li className={`py-3 text-xs sm:text-sm   font-semibold border-b-[3px] text-gray-400 border-b-transparent ${pathMatchRoute('/') && 'text-red-800 border-b-red-800'}`} onClick={()=>navigate('/')} >Home</li>
                     <li className={`py-3 text-xs sm:text-sm  font-semibold border-b-[3px] text-gray-400 border-b-transparent ${pathMatchRoute('/offers') && 'text-red-800 border-b-red-800'}`} onClick={()=>navigate('/offers')}>Offers</li>
                     <li className={`py-3 text-xs sm:text-sm font-semibold border-b-[3px] text-gray-400 border-b-transparent ${pathMatchRoute('/sign-in') && 'text-red-800 border-b-red-800' || pathMatchRoute('/profile') && 'text-red-800 border-b-red-800'}`} onClick={()=>navigate('/profile')}>{pageState}</li> 
-                    {/*practicing*/}
-                     <li className='space-x-10' >
+                    {/*practicing
+                      <li className='space-x-10' >
                         <FaUserCircle className='absolute right-3 top-3 text-base sm:text-lg text-gray-400  hover:text-red-600 transition duration-600 ease-in'></FaUserCircle>
                         
                      </li>
+                    */}
+                   
                 </ul>
             </div>
         </header>

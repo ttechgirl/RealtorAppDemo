@@ -324,7 +324,7 @@ export default function CreateListing() {
                         value={regular} 
                         onChange={onChange}
                         min='10,000' 
-                        max='100,000,000' 
+                        max='1000000000' 
                         required 
                         className='w-full text-center rounded transition duration-150 ease-in-out font-medium text-xl text-gray-700 px-4 py-2 border bg-white border-gray-200 focus:bg-white focus:text-gray-700 focus:slate-600 shadow-sm focus:border-slate-600' 
                     />
@@ -346,7 +346,7 @@ export default function CreateListing() {
                         value={discount} 
                         onChange={onChange} 
                         min='10,000'
-                        max='100,000,000' 
+                        max='1000000000' 
                         required ={offers}
                         className='w-full text-center rounded transition duration-150 ease-in-out font-medium text-xl text-gray-700 px-4 py-2 bg-white border border-gray-200 focus:bg-white focus:text-gray-700 focus:slate-600 shadow-sm focus:border-slate-600'
                   />

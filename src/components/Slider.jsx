@@ -8,7 +8,7 @@ import 'swiper/css/bundle';
 import { useNavigate } from 'react-router';
 
 export default function Slider() {
-    const [listings,setListings] =useState(null);
+    const [getListings,setGetListings] =useState(null);
     const [loading,setLoading] =useState(true);
     const navigate =useNavigate();
     SwiperCore.use([Autoplay,Navigation,Pagination]);
@@ -27,7 +27,7 @@ export default function Slider() {
                 data:doc.data(),
             });
         });
-        setListings(listings);
+        setGetListings(listings);
         setLoading(false);
     }
     fetchListings();
@@ -37,7 +37,7 @@ export default function Slider() {
   }
   
   return (
-     listings && (
+     getListings && (
         <>
             <Swiper
                 slidesPerView ={1}
@@ -47,13 +47,13 @@ export default function Slider() {
                 modules={[EffectFade]}
                 autoplay={{delay:2000}}
              >
-                {listings.map(({data,id}) => (
+                {getListings.map(({data,id}) => (
                 <SwiperSlide
                 key={id} 
                 onClick={()=> navigate(`/category/${data.type}/${id}`)}> 
                 <div 
                 style={{
-                  backgroundImage:`url(${data.imgUrls[0]}) center no repeat`,backgroundSize:'cover'
+                  background:`url(${data.imgUrls[0]}) center no-repeat`,backgroundSize:'cover'
                 }}
                 className="w-full  h-[450px] lg:h-[650px] relative overflow-hidden "
                 >
